@@ -81,7 +81,7 @@ function App() {
       </div>
       </>
       };
-      <div className="text-center mt-8 text-gray-600">
+      <div className="text-center mt-8 text-2xl text-black-600">
         <h2>Developed by Jesse Gitau</h2>
       </div>
     </div>
