@@ -19,7 +19,7 @@ function CurrentWeatherCard({weatherData, name}) {
   let currentTimeString = currentDateObject.getUTCHours() + ':' + String(currentDateObject.getUTCMinutes()).padStart(2,'0');
   let sunriseDateString = sunriseDateObject.getUTCHours() + ':' + String(sunriseDateObject.getUTCMinutes()).padStart(2,'0');
   let sunsetDateString = sunsetDateObject.getUTCHours() + ':' + String(sunsetDateObject.getUTCMinutes()).padStart(2,'0');
-  
+
   let currentTime = currentTimeString;
   let currentDate = currentDateString;
 
@@ -53,9 +53,9 @@ function CurrentWeatherCard({weatherData, name}) {
                 </div>
             </div>
             <div className=" mb-4 text-center">
+                <p className="text-black-500 text-3xl">{weatherData.name}</p>
                 <p className="text-xl font-medium text-gray-700">{weatherData.weather?.[0]?.main}</p>
                 <p className="text-gray-500" autoCapitalize="">{weatherData.weather?.[0]?.description}</p>
-                <p className="text-gray-500">{weatherData.name}</p>
             </div>
             <ul className=" space-y-2 ">
                 <li className="flex justify-between text-1xl font-bold ">
