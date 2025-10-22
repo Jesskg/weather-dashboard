@@ -1,4 +1,4 @@
-import React,{ useState } from "react";
+import React ,{ useState } from "react";
 import axios from "axios";
 import CurrentWeatherCard from "./components/CurrentWeatherCard";
 
@@ -15,15 +15,15 @@ function App() {
 
   const [currentData, setCurrentData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [timezone, setTimezone] = useState('');
+  const [name, setName] = useState('');
 
   async function handleLocationSearch(e) {
     
     e.preventDefault()
     let response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${API_KEY}&units=metric`);
     
-    setCurrentData(response.data.current);
-    setTimezone(response.data.timezone);
+    setCurrentData(response.data);
+    setName(response.data.timezone);
     setLoading(false);
 
   };
@@ -35,7 +35,7 @@ function App() {
       
       
       return (
-    <div className="w-screen h-screen flex justify-content: center flex-col bg-gradient-to-b from-green-400 to-white-400 ">
+    <div className="w-screen h-screen flex justify-content:center flex-col bg-gradient-to-b from-green-400 to-white-400 ">
       <h3 className="text-3xl font-bold bg-white bg-opacity-50 rounded-md mx-auto text-gray-800 text-center mt-16 mb-4 ">Find Your City!</h3>
 
       <div className="p-6 bg-white bg-opacity-50 rounded-lg mx-auto shadow-md max-w-md"> 
@@ -51,7 +51,7 @@ function App() {
           type="number"
           min={-90}
           max={90}
-          step={0.01}
+          step={0.0001}
           required
           />
            <input 
@@ -62,7 +62,7 @@ function App() {
           type="number"
           min={-180}
           max={180}
-          step={0.01}
+          step={0.0001}
           required
           />
           <button 
@@ -73,16 +73,19 @@ function App() {
       </div>
       {!loading && 
       <>
-      <div className="text-2xl font-semibold flex mt-16 justify-center flex-row">
+      <div className="text-1xl font-semibold flex mt-16 justify-center flex-row">
         <div className="mt-8 mx-auto">
           <h3 className="text-2xl font-bold bg-white bg-opacity-50 rounded-md mx-auto text-gray-800 text-center mb-4 ">Current Weather Data</h3>
-          <CurrentWeatherCard weatherData={currentData} timezone={timezone} />
+          <CurrentWeatherCard weatherData={currentData} name={name} />
         </div> 
       </div>
       </>
       };
+      <div className="text-center mt-8 text-gray-600">
+        <h2>Developed by Jesse Gitau</h2>
+      </div>
     </div>
   )
-};
+}
 
 export default App;

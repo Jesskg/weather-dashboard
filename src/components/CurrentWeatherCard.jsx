@@ -1,6 +1,6 @@
 import React,{ useEffect, useState } from "react";
 
-function CurrentWeatherCard(weatherData, timezone) {
+function CurrentWeatherCard({weatherData, name}) {
 
   const [times, setTimes ] = useState({
       currentDate: '',
@@ -10,20 +10,21 @@ function CurrentWeatherCard(weatherData, timezone) {
     });
 
   useEffect(() => {
-  if (!props.weatherData || !props.weatherData.dt) return;
-
-  let currentDateObject = new Date(weatherData.dt * 1000);
-  let sunriseDateObject = new Date(weatherDate.sunrise * 1000);
-  let sunsetDateObject = new Date(weatherData.sunset * 1000);
+  
+  let currentDateObject = new Date((weatherData.dt + weatherData.timezone)* 1000);
+  let sunriseDateObject = new Date((weatherData.sys.sunrise + weatherData.timezone)* 1000);
+  let sunsetDateObject = new Date((weatherData.sys.sunset + weatherData.timezone)* 1000);
 
   let currentDateString = currentDateObject.toDateString();
-  let sunriseDateString = sunriseDateObject.toLocaleTimeString();
-  let sunsetDateString = sunsetDateObject.toLocaleTimeString();
+  let currentTimeString = currentDateObject.getUTCHours() + ':' + String(currentDateObject.getUTCMinutes()).padStart(2,'0');
+  let sunriseDateString = sunriseDateObject.getUTCHours() + ':' + String(sunriseDateObject.getUTCMinutes()).padStart(2,'0');
+  let sunsetDateString = sunsetDateObject.getUTCHours() + ':' + String(sunsetDateObject.getUTCMinutes()).padStart(2,'0');
   
-  let currentTime = currentDateString.substring(16,24);
-  let currentDate = currentDateString.substring(0,3) + ', ' + currentDateString.substring(4,15);
-  let sunriseTime = sunriseDateString.substring(16,24);
-  let sunsetTime = sunsetDateString.substring(16,24);
+  let currentTime = currentTimeString;
+  let currentDate = currentDateString;
+
+  let sunriseTime = sunriseDateString;
+  let sunsetTime = sunsetDateString;
 
     setTimes({...times,
       currentDate: currentDate,
@@ -31,7 +32,9 @@ function CurrentWeatherCard(weatherData, timezone) {
       sunriseTime: sunriseTime,
       sunsetTime: sunsetTime
     });
-}, []);
+
+    console.log(currentDateObject);
+}, [weatherData]);
 
 
   return (
@@ -43,20 +46,20 @@ function CurrentWeatherCard(weatherData, timezone) {
             <div className="flex justify-center mb-4">
                 <div className="bg-green-200 p-2 rounded-full">
                     <img 
-                    src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
+                    src={`http://openweathermap.org/img/wn/${weatherData.weather?.[0]?.icon}@2x.png`}
                     alt="Weather icon"
                     className="w-16 h-16 "
                 />
                 </div>
             </div>
             <div className=" mb-4 text-center">
-                <p className="text-xl font-medium text-gray-700">{weatherData.weather[0].main}</p>
-                <p className="text-gray-500" autoCapitalize="">{props.weatherData.weather[0].description}</p>
-                <p className="text-gray-500">{timezone}</p>
+                <p className="text-xl font-medium text-gray-700">{weatherData.weather?.[0]?.main}</p>
+                <p className="text-gray-500" autoCapitalize="">{weatherData.weather?.[0]?.description}</p>
+                <p className="text-gray-500">{weatherData.name}</p>
             </div>
             <ul className=" space-y-2 ">
                 <li className="flex justify-between text-1xl font-bold ">
-                <span>Current Date: </span>
+                <span>Current Date:  </span>
                 <span>
                   {times.currentDate}
                 </span>
@@ -70,13 +73,13 @@ function CurrentWeatherCard(weatherData, timezone) {
                 <li className="flex justify-between text-1xl font-bold ">
                 <span>Current Temp: </span>
                 <span>
-                  {Math.round(weatherData.temp)}°C
+                  {Math.round(weatherData.main.temp)}°C
                 </span>
                 </li>
                 <li className="flex justify-between text-1xl font-bold ">
                 <span>Feels like: </span>
                 <span>
-                  {Math.round(weatherData.feels_like)}°C
+                  {Math.round(weatherData.main.feels_like)}°C
                 </span>
               </li>
                 <li className="flex justify-between text-1xl font-bold ">
